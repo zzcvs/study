@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.restaurant.mapper.MenuMapper">
+    
+    <resultMap id="MenuWithRecipeMap" type="com.restaurant.entity.Menu">
+        <id property="id" column="id"/>
+        <result property="menuDate" column="menu_date"/>
+        <result property="mealType" column="meal_type"/>
+        <result property="recipeId" column="recipe_id"/>
+        <result property="stock" column="stock"/>
+        <result property="soldCount" column="sold_count"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="recipe" javaType="com.restaurant.entity.Recipe">
+            <id property="id" column="recipe_id"/>
+            <result property="name" column="recipe_name"/>
+            <result property="price" column="price"/>
+            <result property="category" column="category"/>
+            <result property="description" column="description"/>
+            <result property="ingredients" column="ingredients"/>
+            <result property="imageUrl" column="image_url"/>
+        </association>
+    </resultMap>
+    
+    <select id="getMenuWithRecipe" resultMap="MenuWithRecipeMap">
+        SELECT m.*, r.name as recipe_name, r.price, r.category, r.description, r.ingredients, r.image_url 
+        FROM menu m 
+        LEFT JOIN recipe r ON m.recipe_id = r.id 
+        WHERE m.menu_date = #{menuDate} AND m.meal_type = #{mealType} AND m.status = 1
+    </select>
+    
+    <select id="getTodayMenu" resultMap="MenuWithRecipeMap">
+        SELECT m.*, r.name as recipe_name, r.price, r.category, r.description, r.ingredients, r.image_url 
+        FROM menu m 
+        LEFT JOIN recipe r ON m.recipe_id = r.id 
+        WHERE m.menu_date = #{menuDate} AND m.status = 1
+    </select>
+    
+</mapper>
