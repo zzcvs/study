@@ -38,7 +38,7 @@ public class EmployeeController {
         
         model.addAttribute("user", user);
         
-        List<Menu> lunchMenu = menuService.getMenuByDateAndMealType(LocalDate.now(), "午餐");
+        List<Menu> lunchMenu = menuService.getOrCreateMenu(LocalDate.now(), "午餐");
         model.addAttribute("lunchMenu", lunchMenu);
         
         List<OrderInfo> myOrders = orderService.getOrdersByUserId(user.getId());
@@ -59,7 +59,7 @@ public class EmployeeController {
         LocalDate queryDate = date != null ? LocalDate.parse(date) : LocalDate.now();
         String queryMealType = mealType != null ? mealType : "午餐";
         
-        List<Menu> menuList = menuService.getMenuByDateAndMealType(queryDate, queryMealType);
+        List<Menu> menuList = menuService.getOrCreateMenu(queryDate, queryMealType);
         model.addAttribute("menuList", menuList);
         model.addAttribute("queryDate", queryDate);
         model.addAttribute("queryMealType", queryMealType);
